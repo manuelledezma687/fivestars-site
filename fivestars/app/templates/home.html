@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="{% static 'img-slider/camry.jpg' %}" class="d-block w-100" alt="Tooyota Camry" />
+        </div>
+        <div class="carousel-item">
+            <img src="{% static 'img-slider/camry.jpg' %}" class="d-block w-100" alt="Tooyota Camry" />
+        </div>
+        <div class="carousel-item">
+            <img src="{% static 'img-slider/camry.jpg' %}" class="d-block w-100" alt="Tooyota Camry" />
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+    </a>
+</div>
+<section id="service" class="service-main">
+    <h1 class="services-title">Services</h1>
+    <div class="service-list">
+        <div class="service-box">
+            <img src="{% static 'icons/city.png'%}" id="image-service" alt="car" />
+            <h2 class="card-title" id="service-title">Stroll through the city</h2>
+            <p class="card-text" id="p-service">If you come for a walk with your family, or simply want to make a
+                delivery or process, our service by hour or distance is the solution.</p>
+        </div>
+        <div clasNames="service-box">
+            <img src="{% static 'icons/aero.png'%}" id="image-service" alt="airplane" />
+            <h2 class="card-title" id="service-title">Transfer on time and safely</h2>
+            <p class="card-text" id="p-service">At FiveStar we offer you punctuality, security and trust, for your
+                transfers from the airport to your meeting point.</p>
+        </div>
+        <div class="service-box">
+            <img src="{% static 'icons/car.png'%}" id="image-service" alt="car" />
+            <h2 class="card-title" id="service-title">Top cars and drivers</h2>
+            <p class="card-text" id="p-service">We are known for providing you with a quality service, all our cars go
+                to the service every 15 days, to check their operation. Each driver goes through company filters and we
+                value the qualifications on each trip to offer quality service.</p>
+        </div>
+    </div>
+</section>
+<div id="ratings">
+    <h1 class="testimonials-title">Our testimonials</h1>
+    <div class='container-rating'>
+        <ul id="ul-rating">
+            {% for rating in ratings %}
+            <li id='testimonials'>
+                <p class='comments'>"{{ rating.comments }}..."</p>
+                <h2 class='name-customer'>{{ rating.first_name }} {{ rating.last_name }}</h2>
+                <div class="starring">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4 class="date">Created at {{ rating.created_at }}</h4>
+                </div>
+                {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

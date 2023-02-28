@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<div id="faqs">
+    <h1 class="faqs-title">FAQs</h1>
+    <article id='ul-faq'>
+        {% for faq in faqs%}
+        <li id='question-container'>
+            <h2 class='privacy-title ' key={index}>{{ faq.question }}</h2>
+            <p class='answer'>{{ faq.answer }}</p>
+        </li>
+        {% endfor %}
+    </article>
+</div>
+{% endblock %}

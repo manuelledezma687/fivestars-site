@@ -1,0 +1,40 @@
+:root {
+	--black: #030200;
+	--blue: #506496;
+	--golden: #D3B365;
+	--light-golden: #E2D3A8;
+	--red: red;
+	--text-input-field: #F7F7F7;
+	--very-light-golden: #FEF9EA;
+	--white: #FFFFFF;
+	--ssm: 1rem;
+	--sgm: 1.2rem;
+	--sm: 1.4rem;
+	--md: 1.6rem;
+	--lg: 1.8rem;
+	--eg: 2.4rem;
+	--seg: 2.8rem;
+}
+
+body {
+	background-color: var(--white);
+	box-sizing: border-box;
+	font-family: 'Poppins';
+	font-size: 62.5%;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+
+h1 {
+	font-size: var(--md);
+}
+
+p {
+	font-size: var(--sm);
+}
+
+span {
+	color: var(--golden);
+	font-weight: bold;
+}

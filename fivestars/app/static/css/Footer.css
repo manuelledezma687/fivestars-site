@@ -1,0 +1,63 @@
+.main-footer {
+  background-color: var(--blue);
+  bottom: 0;
+  color: var(--white);
+  padding-top: 3em;
+  position: relative;
+  width: 100%;
+}
+
+.row {
+  display: flex;
+  margin: auto;
+}
+
+.col {
+  font-size: var(--ssm);
+  margin: auto;
+}
+
+#terms-block {
+  text-align: center;
+}
+
+.terms {
+  margin: auto;
+}
+
+#social-networks {
+  display: flex;
+  margin: 0;
+}
+
+#social {
+  height: 50px;
+  margin-right: 4%;
+  width: 50px;
+}
+
+.email-contact {
+  font-size: var(--ssm);
+  font-style: italic;
+  padding-top: 10px;
+}
+
+#terms-block a {
+  color: var(--white);
+}
+
+@media (max-width: 859px) {
+
+  .row {
+    display: block;
+    margin: 0;
+  }
+}
+
+@media (max-width: 390px) {
+
+  h4.email-contact {
+    font-size: 0.8rem;
+    width: auto;
+  }
+}
