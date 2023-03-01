@@ -17,6 +17,11 @@
   margin: auto;
 }
 
+#map {
+  height: 160px;
+  width: 100%;
+}
+
 #terms-block {
   text-align: center;
 }
@@ -61,3 +66,60 @@
     width: auto;
   }
 }
+
+/* .main-footer {
+  background-color: var(--blue);
+  bottom: 0;
+  color: var(--white);
+  padding-top: 3em;
+  position: relative;
+  width: 100%;
+  }
+  
+  .col {
+  font-size: var(--ssm);
+  margin: auto;
+  }
+  
+  .email-contact {
+  font-size: var(--ssm);
+  font-style: italic;
+  padding-top: 10px;
+  }
+  
+  #social {
+  height: 50px;
+  margin-right: 4%;
+  width: 50px;
+  }
+  
+  #social-networks {
+  display: flex;
+  margin: 0;
+  }
+  
+  #terms-block {
+  text-align: center;
+  }
+  
+  #terms-block a {
+  color: var(--white);
+  }
+  
+  .terms {
+  margin: auto;
+  }
+  
+  @media (max-width: 390px) {
+  h4.email-contact {
+  font-size: 0.8rem;
+  width: auto;
+  }
+  }
+  
+  @media (max-width: 859px) {
+  .row {
+  display: block;
+  margin: 0;
+  }
+  } */

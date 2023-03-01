@@ -1,4 +1,6 @@
 from django.db import models
+import secrets
+
 
 SERVICES = (
     ("O", "Type of Service"),
@@ -25,6 +27,27 @@ PAYMENT_METHOD = (
 )
 
 
+class Referral(models.Model):
+    full_name = models.CharField(max_length=30)
+    email = models.CharField(max_length=50, unique=True)
+    referrals_code = models.CharField(max_length=8, unique=True, editable=False)
+    created_at = models.DateTimeField("date created")
+
+    def __str__(self):
+        columns = f"{self.full_name} | {self.email} | {self.referrals_code}"
+        return columns
+
+    def save(self, *args, **kwargs):
+        if not self.referrals_code:
+            self.referrals_code = self.generate_code()
+        super().save(*args, **kwargs)
+
+    def generate_code(self):
+        code = secrets.token_hex(4)[:8]
+        while Referral.objects.filter(referrals_code=code).exists():
+            code = secrets.token_hex(4)[:8]
+        return code
+
 class Booking(models.Model):
     type_of_service = models.CharField(
         max_length=20, choices=SERVICES, default=None)
@@ -40,17 +63,17 @@ class Booking(models.Model):
     passengers = models.IntegerField(choices=PASSENGERS, default=None)
     phone = models.CharField(max_length=20)
     observations = models.CharField(max_length=200, blank=True)
-    referral = models.CharField(max_length=10, blank=True)
+    referrals_code = models.CharField(max_length=8, blank=True, default=None)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        colmuns = f'' + self.full_name + ' | ' + self.pick_up_location + ' To ' + \
+        colmuns = f'Referral Code: ' + self.referrals_code + ' |'+ self.full_name + ' | ' + self.pick_up_location + ' To ' + \
             self.drop_off_location + ' | ' + self.email + ' | ' + self.phone
         return colmuns
 
 
 class Rating(models.Model):
-    booking_id = models.ForeignKey(Booking, on_delete=models.PROTECT)
+    booking_id = models.OneToOneField(Booking, on_delete=models.PROTECT)
     first_name = models.CharField(max_length=20)
     last_name = models.CharField(max_length=20)
     comments = models.CharField(max_length=50)
@@ -71,18 +94,6 @@ class Contact(models.Model):
     def __str__(self):
         colmuns = f'' + self.email + ' | Message:' + \
             self.message + ' | ' + self.full_name
-        return colmuns
-
-
-class Referral(models.Model):
-    full_name = models.CharField(max_length=30)
-    email = models.CharField(max_length=50)
-    referrals_code = models.CharField(max_length=10)
-    created_at = models.DateTimeField("date created")
-
-    def __str__(self):
-        colmuns = f'' + self.full_name + ' | ' + \
-            self.email + ' | ' + self.referrals_code
         return colmuns
 
 

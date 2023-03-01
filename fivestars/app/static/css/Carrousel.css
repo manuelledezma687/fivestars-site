@@ -1,8 +1,6 @@
 #carouselExampleControls {
     display: block;
     height: auto;
-    margin-bottom: 20px;
-    margin-top: 20px;
-    margin: auto;
+    margin: 20px auto;
     width: 98%;
 }

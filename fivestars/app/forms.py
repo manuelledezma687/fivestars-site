@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
-from .models import Contact, Booking, PAYMENT_METHOD, SERVICES, PASSENGERS
+from .models import Contact, Booking, Referral, PAYMENT_METHOD, SERVICES, PASSENGERS
 
 
 class ContactForm(forms.ModelForm):
@@ -14,10 +14,12 @@ class BookingForm(forms.ModelForm):
     pick_up_location = forms.CharField(max_length=150, widget=forms.TextInput(attrs={
         'placeholder': 'Type your location',
         'autofocus': 'autofocus',
+        'id': 'pick_up_location',
         'class': 'form-control', }))
     drop_off_location = forms.CharField(max_length=150, widget=forms.TextInput(attrs={
         'placeholder': 'Type your location',
         'autofocus': 'autofocus',
+        'id': 'drop_off_location',
         'class': 'form-control', }))
     full_name = forms.CharField(max_length=30, widget=forms.TextInput(attrs={
         'placeholder': 'Full Name',
@@ -55,7 +57,7 @@ class BookingForm(forms.ModelForm):
         'placeholder': 'Observations',
         'autofocus': 'autofocus',
         'class': 'form-control', }))
-    referrals = forms.CharField(max_length=10, required=False, widget=forms.TextInput(attrs={
+    referrals_code = forms.ModelChoiceField(queryset=Referral.objects.all(), widget=forms.Select(attrs={
         'placeholder': 'Referral Code 10% OFF DISCOUNT',
         'autofocus': 'autofocus',
         'class': 'form-control', }))
@@ -66,7 +68,7 @@ class BookingForm(forms.ModelForm):
     class Meta:
         model = Booking
         fields = ('pick_up_location', 'drop_off_location', "full_name",
-                  'email', 'hour', 'date', 'flight_id', 'payment_method', 'passengers', 'phone', 'observations', 'referrals', 'type_of_service')
+                  'email', 'hour', 'date', 'flight_id', 'payment_method', 'passengers', 'phone', 'observations', 'referrals_code', 'type_of_service')
 
 
 class CustomAuthenticationForm(AuthenticationForm):
@@ -74,3 +76,10 @@ class CustomAuthenticationForm(AuthenticationForm):
         attrs={'class': 'form-control', 'placeholder': 'Usuario'}))
     password = forms.CharField(widget=forms.PasswordInput(
         attrs={'class': 'form-control', 'placeholder': 'Password'}))
+
+
+class ReferralForm(forms.ModelForm):
+
+    class Meta:
+        model = Referral
+        fields = ('full_name', 'email')

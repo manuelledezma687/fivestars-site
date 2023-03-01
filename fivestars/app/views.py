@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import authenticate
-from .models import Rating, Faq
+from .models import Rating, Faq, Referral
 from .forms import ContactForm, BookingForm, CustomAuthenticationForm
 
 
@@ -10,6 +10,8 @@ def index(request):
     if request.method == "POST":
         form = BookingForm(request.POST)
         if form.is_valid():
+            query = form.cleaned_data['referrals_code']
+            results = Referral.objects.filter(campo__icontains=query)
             form.save()
             return redirect('app:success')
     else:
