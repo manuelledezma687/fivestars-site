@@ -6,8 +6,19 @@ from .forms import ContactForm, BookingForm, CustomAuthenticationForm
 
 
 def index(request):
-    ratings = Rating.objects.order_by('created_at')[:3]
-    return render(request, "home.html", {'ratings': ratings})
+    ratings = Rating.objects.order_by('-created_at')[:3]
+    if request.method == "POST":
+        form = BookingForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('app:success')
+    else:
+        form = BookingForm()
+    context = {
+        'ratings': ratings,
+        'form': form,
+    }
+    return render(request, "home.html", context)
 
 
 def error_404(request, exception):
@@ -20,17 +31,6 @@ def success(request):
 
 def success_message(request):
     return render(request, "success_message.html")
-
-
-def bookings(request):
-    if request.method == "POST":
-        form = BookingForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('app:success')
-    else:
-        form = BookingForm()
-    return render(request, 'booking.html', {'form': form})
 
 
 def contact(request):

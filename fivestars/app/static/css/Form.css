@@ -40,6 +40,8 @@ h1.title:hover {
     color: var(--black);
     font-size: var(--ssm);
     margin-bottom: 0%;
+    margin-left: 10px;
+    padding-bottom: 5px;
 }
 
 .single-input {

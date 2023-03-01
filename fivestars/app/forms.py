@@ -30,12 +30,10 @@ class BookingForm(forms.ModelForm):
         'autofocus': 'autofocus',
         'class': 'form-control'}))
     hour = forms.CharField(max_length=20, widget=forms.TextInput(attrs={
-        'placeholder': 'hour',
         'type': 'time',
         'autofocus': 'autofocus',
         'class': 'form-control'}))
     date = forms.CharField(max_length=20, widget=forms.TextInput(attrs={
-        'placeholder': 'date',
         'type': 'date',
         'autofocus': 'autofocus',
         'class': 'form-control'}))
@@ -58,7 +56,7 @@ class BookingForm(forms.ModelForm):
         'autofocus': 'autofocus',
         'class': 'form-control', }))
     referrals = forms.CharField(max_length=10, required=False, widget=forms.TextInput(attrs={
-        'placeholder': 'Referral Corde 10% OFF DISCOUNT',
+        'placeholder': 'Referral Code 10% OFF DISCOUNT',
         'autofocus': 'autofocus',
         'class': 'form-control', }))
     type_of_service = forms.ChoiceField(choices=SERVICES, widget=forms.Select(attrs={
