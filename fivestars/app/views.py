@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import authenticate
-from .models import Rating, Faq, Referral
+from django.core.mail import send_mail
+from .models import Rating, Faq, Referral, Contact
 from .forms import ContactForm, BookingForm, CustomAuthenticationForm
+
 
 
 def index(request):
@@ -11,9 +13,10 @@ def index(request):
         form = BookingForm(request.POST)
         if form.is_valid():
             query = form.cleaned_data['referrals_code']
-            results = Referral.objects.filter(campo__icontains=query)
-            form.save()
-            return redirect('app:success')
+            results = Referral.objects.filter(email=query)
+            if results:
+                form.save()
+                return redirect('app:success')
     else:
         form = BookingForm()
     context = {
@@ -39,7 +42,16 @@ def contact(request):
     if request.method == "POST":
         form = ContactForm(request.POST)
         if form.is_valid():
-            form.save()
+            full_name = form.cleaned_data['full_name']
+            email = form.cleaned_data['email']
+            message = form.cleaned_data['message']
+            subject = f'Mensaje de {full_name}'
+            body = f'De: {email}\n\n{message}'
+            recipient_list = ['manuelledezma687@gmail.com', email]
+            send_mail(subject, body, email,
+                      recipient_list, fail_silently=False)
+            contact = Contact(full_name=full_name, email=email, message=message)
+            contact.save()
             return redirect('app:success_message')
     else:
         form = ContactForm()
