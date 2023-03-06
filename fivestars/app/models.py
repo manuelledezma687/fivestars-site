@@ -31,7 +31,7 @@ PAYMENT_METHOD = (
 class Referral(models.Model):
     full_name = models.CharField(max_length=30)
     email = models.CharField(max_length=50, unique=True)
-    referrals_code = models.CharField(max_length=8, unique=True, editable=False)
+    referrals_code = models.CharField(max_length=10, unique=True, editable=False)
     bookings_count = models.PositiveIntegerField(default=0, editable=False)
     earnings = models.DecimalField(decimal_places=2, max_digits=8, default=0, editable=False)
     bookings_amount = models.FloatField(default=0)
@@ -53,7 +53,7 @@ class Referral(models.Model):
         return f'STARS{code}'
 
 
-class Booking(models.Model):
+class Booking(models.Model):  ## trabajar este metodo para para booking_count y booking_amount
     type_of_service = models.CharField(
         max_length=20, choices=SERVICES, default=None)
     pick_up_location = models.CharField(max_length=150)
@@ -73,12 +73,29 @@ class Booking(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
-        if self.referrals_code:
-            self.referrals_code.bookings_count += 1
-            self.referrals_code.bookings_amount += self.amount * 0.1
-            self.referrals_code.save()
+        if self.pk is None:
+            if self.referrals_code is not None:
+                self.referrals_code.bookings_count += 1
+                self.referrals_code.save()
+        else:
+            # Booking is being updated, check if referrals code changed
+            old_booking = Booking.objects.get(pk=self.pk)
+            if old_booking.referrals_code != self.referrals_code:
+                # Referrals code changed, update bookings count and amount
+                if old_booking.referrals_code is not None:
+                    old_booking.referrals_code.bookings_count -= 1
+                    old_booking.referrals_code.save()
+                if self.referrals_code is not None:
+                    self.referrals_code.bookings_count += 1
+                    self.referrals_code.save()
         super().save(*args, **kwargs)
 
+    def delete(self, *args, **kwargs):
+        if self.referrals_code is not None:
+            self.referrals_code.bookings_count -= 1
+            self.referrals_code.save()
+        super().delete(*args, **kwargs)
+    
     def __str__(self):
         columns = f"Referral Code: {self.referrals_code} | {self.full_name} | {self.pick_up_location} To {self.drop_off_location} | {self.email} | {self.phone}"
         return columns
@@ -88,6 +105,7 @@ class Booking(models.Model):
 
     def get_absolute_url(self):
         return reverse("booking_detail", args=[str(self.id)])
+    
 
 
 class Rating(models.Model):
