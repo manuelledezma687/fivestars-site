@@ -1,0 +1,21 @@
+{% load static %}
+<header style="background-color: wheat; text-align: center; padding-top: 30px; padding-bottom: 30px;">
+    <img src="https://fivestarscarservice.com/assets/logo.9c550742.png" alt="Logo">
+</header>
+<h1 style="font-size: larger; text-align: center;">
+    {% block title %}Welcome to our referral program{% endblock %}
+</h1>
+{% block content %}
+<p style="text-align: center;">Dear {{ full_name }}, We are honored to have you join us through our Five Stars Car
+    Service referral program.. </p>
+<p style="text-align: center;"><strong>Email:</strong> {{ email }}</p>
+<p style="text-align: center;"><strong>Your referral code is:</strong> {{ referrals_code }}</p>
+<p style="font-size: larger ;text-align: center;">Thank you for be part of our referral program.</p>
+<footer style="background-color: #506496;color: white; padding-top: 20px; padding-bottom: 20px;">
+    <ul style="list-style: none; text-align: center; font-size: large;">
+        <li>1387 Wildflower Downs</li>
+        <li>Lawrenceville, GA 30044</li>
+        <li>United States</li>
+    </ul>
+</footer>
+{% endblock %}

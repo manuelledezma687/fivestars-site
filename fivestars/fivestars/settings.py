@@ -15,14 +15,13 @@ ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
 
 
 INSTALLED_APPS = [
-   ## 'autocomplete-light',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'app.apps.AppConfig',
+'django.contrib.admin',
+'django.contrib.auth',
+'django.contrib.contenttypes',
+'django.contrib.sessions',
+'django.contrib.messages',
+'django.contrib.staticfiles',
+'app.apps.AppConfig',
 ]
 
 MIDDLEWARE = [
@@ -33,7 +32,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-   # "autocomplete_light.middleware.AutocompleteMiddleware",
 ]
 
 ROOT_URLCONF = 'fivestars.urls'
@@ -112,4 +110,3 @@ EMAIL_HOST = os.environ.get('EMAIL_HOST')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = os.environ.get('EMAIL_PORT')
 EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', True)
-EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL', False)

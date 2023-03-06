@@ -1,5 +1,6 @@
 from django.db import models
 import secrets
+from django.urls import reverse
 
 
 SERVICES = (
@@ -31,10 +32,13 @@ class Referral(models.Model):
     full_name = models.CharField(max_length=30)
     email = models.CharField(max_length=50, unique=True)
     referrals_code = models.CharField(max_length=8, unique=True, editable=False)
+    bookings_count = models.PositiveIntegerField(default=0, editable=False)
+    earnings = models.DecimalField(decimal_places=2, max_digits=8, default=0, editable=False)
+    bookings_amount = models.FloatField(default=0)
     created_at = models.DateTimeField("date created")
 
     def __str__(self):
-        columns = f"{self.full_name} | {self.email} | {self.referrals_code}"
+        columns = f"{self.full_name} | {self.referrals_code} | Booking Count: {self.bookings_count} | Earnings {self.bookings_amount}"
         return columns
 
     def save(self, *args, **kwargs):
@@ -43,10 +47,11 @@ class Referral(models.Model):
         super().save(*args, **kwargs)
 
     def generate_code(self):
-        code = secrets.token_hex(4)[:8]
+        code = secrets.token_hex(4)[:4]
         while Referral.objects.filter(referrals_code=code).exists():
-            code = secrets.token_hex(4)[:8]
-        return code
+            code = secrets.token_hex(4)[:4]
+        return f'STARS{code}'
+
 
 class Booking(models.Model):
     type_of_service = models.CharField(
@@ -63,13 +68,26 @@ class Booking(models.Model):
     passengers = models.IntegerField(choices=PASSENGERS, default=None)
     phone = models.CharField(max_length=20)
     observations = models.CharField(max_length=200, blank=True)
-    referrals_code = models.CharField(max_length=8, blank=True, default=None)
+    referrals_code = models.ForeignKey(Referral,null=True, default=None, on_delete=models.SET_NULL)
+    amount = models.FloatField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def save(self, *args, **kwargs):
+        if self.referrals_code:
+            self.referrals_code.bookings_count += 1
+            self.referrals_code.bookings_amount += self.amount * 0.1
+            self.referrals_code.save()
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        colmuns = f'Referral Code: ' + self.referrals_code + ' |'+ self.full_name + ' | ' + self.pick_up_location + ' To ' + \
-            self.drop_off_location + ' | ' + self.email + ' | ' + self.phone
-        return colmuns
+        columns = f"Referral Code: {self.referrals_code} | {self.full_name} | {self.pick_up_location} To {self.drop_off_location} | {self.email} | {self.phone}"
+        return columns
+
+    class Meta:
+        ordering = ("-date", "hour")
+
+    def get_absolute_url(self):
+        return reverse("booking_detail", args=[str(self.id)])
 
 
 class Rating(models.Model):
@@ -80,9 +98,8 @@ class Rating(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        colmuns = f'' + self.first_name + ' ' + \
-            self.last_name + ' | ' + self.comments
-        return colmuns
+        columns = f"{self.first_name} {self.last_name} | {self.comments}"
+        return columns
 
 
 class Contact(models.Model):

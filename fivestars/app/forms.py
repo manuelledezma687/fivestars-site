@@ -1,4 +1,3 @@
-#from dal import autocomplete
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from .models import Contact, Booking, Referral, PAYMENT_METHOD, SERVICES, PASSENGERS
@@ -8,10 +7,11 @@ class ContactForm(forms.ModelForm):
     full_name = forms.CharField(required=True, max_length=30)
     email = forms.CharField(required=True, max_length=50)
     message = forms.CharField(required=True, max_length=200)
-    
+
     class Meta:
         model = Contact
         fields = ('full_name', 'email', 'message')
+
 
 class BookingForm(forms.ModelForm):
     pick_up_location = forms.CharField(max_length=150, widget=forms.TextInput(attrs={
@@ -29,7 +29,7 @@ class BookingForm(forms.ModelForm):
         'autofocus': 'autofocus',
         'class': 'form-control',
     }))
-    email = forms.CharField(max_length=30, widget=forms.TextInput(attrs={
+    email = forms.CharField(max_length=40, widget=forms.TextInput(attrs={
         'placeholder': 'youremail@example.com',
         'type': 'email',
         'autofocus': 'autofocus',
@@ -42,14 +42,14 @@ class BookingForm(forms.ModelForm):
         'type': 'date',
         'autofocus': 'autofocus',
         'class': 'form-control'}))
-    flight_id = forms.CharField(max_length=20, widget=forms.TextInput(attrs={
+    flight_id = forms.CharField(max_length=50, widget=forms.TextInput(attrs={
         'placeholder': 'Flight Number',
         'autofocus': 'autofocus',
         'class': 'form-control'}))
-    payment_method = forms.ChoiceField(choices=PAYMENT_METHOD, widget=forms.Select(attrs={
+    payment_method = forms.ChoiceField(choices=PAYMENT_METHOD, initial='0', widget=forms.Select(attrs={
         'autofocus': 'autofocus',
         'class': 'form-control'}))
-    passengers = forms.ChoiceField(choices=PASSENGERS, widget=forms.Select(attrs={
+    passengers = forms.ChoiceField(choices=PASSENGERS, initial='0', widget=forms.Select(attrs={
         'autofocus': 'autofocus',
         'class': 'form-control'}))
     phone = forms.CharField(max_length=20, widget=forms.TextInput(attrs={
@@ -60,18 +60,18 @@ class BookingForm(forms.ModelForm):
         'placeholder': 'Observations',
         'autofocus': 'autofocus',
         'class': 'form-control', }))
-    referrals_code = forms.ModelChoiceField(queryset=Referral.objects.all(), required=False, widget=forms.Select(attrs={
+    referrals_code = forms.CharField(max_length=200, required=False, widget=forms.TextInput(attrs={
         'placeholder': 'Referral Code 10% OFF DISCOUNT',
         'autofocus': 'autofocus',
         'class': 'form-control', }))
-    type_of_service = forms.ChoiceField(choices=SERVICES, widget=forms.Select(attrs={
+    type_of_service = forms.ChoiceField(choices=SERVICES, initial='0', widget=forms.Select(attrs={
         'autofocus': 'autofocus',
         'class': 'form-control', }))
 
     class Meta:
         model = Booking
         fields = ('pick_up_location', 'drop_off_location', "full_name",
-                  'email', 'hour', 'date', 'flight_id', 'payment_method', 'passengers', 'phone', 'observations', 'referrals_code', 'type_of_service')
+                  'email', 'hour', 'date', 'flight_id', 'payment_method', 'passengers', 'phone', 'observations', 'type_of_service')
 
 
 class CustomAuthenticationForm(AuthenticationForm):

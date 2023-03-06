@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import authenticate
-from django.core.mail import send_mail
-from .models import Rating, Faq, Referral, Contact
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from .models import Rating, Faq, Contact, Referral
 from .forms import ContactForm, BookingForm, CustomAuthenticationForm
-
 
 
 def index(request):
@@ -12,11 +13,32 @@ def index(request):
     if request.method == "POST":
         form = BookingForm(request.POST)
         if form.is_valid():
-            query = form.cleaned_data['referrals_code']
-            results = Referral.objects.filter(email=query)
-            if results:
-                form.save()
-                return redirect('app:success')
+            referral_code = form.cleaned_data.get('referrals_code')
+            booking = form.save(commit=False)
+            if referral_code:
+                referral = Referral.objects.get(referrals_code=referral_code)
+                booking.referrals_code = referral
+            form.save()
+            full_name = form.cleaned_data['full_name']
+            email = form.cleaned_data['email']
+            phone = form.cleaned_data['phone']
+            pick_up_location = form.cleaned_data['pick_up_location']
+            drop_off_location = form.cleaned_data['drop_off_location']
+            subject = f'Booking from {full_name}'
+            html_content = render_to_string('template_email_booking_client.html', {
+                                            'full_name': full_name, 'email': email, 'phone': phone, 'pick_up_location': pick_up_location, 'drop_off_location': drop_off_location})
+            text_content = strip_tags(html_content)
+            email_msg = EmailMultiAlternatives(subject, text_content, to=[
+                                               'manuelledezma687@gmail.com'], cc=[email])
+            email_msg.attach_alternative(html_content, "text/html")
+            email_msg.send()
+            return redirect('app:success')
+        else:
+            context = {
+                'ratings': ratings,
+                'form': form,
+            }
+            return render(request, "home.html", context)
     else:
         form = BookingForm()
     context = {
@@ -45,12 +67,18 @@ def contact(request):
             full_name = form.cleaned_data['full_name']
             email = form.cleaned_data['email']
             message = form.cleaned_data['message']
-            subject = f'Mensaje de {full_name}'
-            body = f'De: {email}\n\n{message}'
-            recipient_list = ['manuelledezma687@gmail.com', email]
-            send_mail(subject, body, email,
-                      recipient_list, fail_silently=False)
-            contact = Contact(full_name=full_name, email=email, message=message)
+            subject = f'Message from {full_name}'
+
+            html_content = render_to_string('template_email_contact.html', {
+                                            'full_name': full_name, 'email': email, 'message': message})
+            text_content = strip_tags(html_content)
+
+            email_msg = EmailMultiAlternatives(subject, text_content, to=[
+                                               'manuelledezma687@gmail.com'], cc=[email])
+            email_msg.attach_alternative(html_content, "text/html")
+            email_msg.send()
+            contact = Contact(full_name=full_name,
+                              email=email, message=message)
             contact.save()
             return redirect('app:success_message')
     else:

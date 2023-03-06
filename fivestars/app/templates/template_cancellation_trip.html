@@ -1,0 +1,18 @@
+{% load static %}
+<header style="background-color: wheat; text-align: center; padding-top: 30px; padding-bottom: 30px;">
+    <img src="https://fivestarscarservice.com/assets/logo.9c550742.png" alt="Logo">
+</header>
+    <h1 style="font-size: larger; text-align: center;">
+        {% block title %}So so Sorry{% endblock %}
+    </h1>
+    {% block content %}
+    <p style="text-align: center;">Dear {{ full_name }}, a trip with your referral code was cancelled.. </p>
+    <p style="font-size: larger ;text-align: center;">We hope that this will not happen next time.</p>
+<footer style="background-color: #506496;color: white; padding-top: 20px; padding-bottom: 20px;">
+    <ul style="list-style: none; text-align: center; font-size: large;">
+        <li>1387 Wildflower Downs</li>
+        <li>Lawrenceville, GA 30044</li>
+        <li>United States</li>
+    </ul>
+</footer>
+{% endblock %}
