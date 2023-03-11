@@ -1,7 +1,8 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import AuthenticationForm
 from .models import Contact, Booking, Referral, PAYMENT_METHOD, SERVICES, PASSENGERS
-
+from datetime import date
 
 class ContactForm(forms.ModelForm):
     full_name = forms.CharField(required=True, max_length=30)
@@ -40,6 +41,8 @@ class BookingForm(forms.ModelForm):
         'class': 'form-control'}))
     date = forms.CharField(max_length=20, widget=forms.TextInput(attrs={
         'type': 'date',
+        'id': 'date',
+        'min': 'YYYY-MM-DD',
         'autofocus': 'autofocus',
         'class': 'form-control'}))
     flight_id = forms.CharField(max_length=50, widget=forms.TextInput(attrs={

@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import authenticate
@@ -10,14 +11,19 @@ from .forms import ContactForm, BookingForm, CustomAuthenticationForm
 
 def index(request):
     ratings = Rating.objects.order_by('-created_at')[:3]
+    today = datetime.today().date()
     if request.method == "POST":
         form = BookingForm(request.POST)
         if form.is_valid():
             referral_code = form.cleaned_data.get('referrals_code')
             booking = form.save(commit=False)
             if referral_code:
-                referral = Referral.objects.get(referrals_code=referral_code)
-                booking.referrals_code = referral
+                try:
+                    referral = Referral.objects.get(
+                        referrals_code=referral_code)
+                    booking.referrals_code = referral
+                except Referral.DoesNotExist:
+                    return render(request, 'home.html', {'form': form, 'error': 'Referral code does not exist.'})
             form.save()
             full_name = form.cleaned_data['full_name']
             email = form.cleaned_data['email']
@@ -68,11 +74,9 @@ def contact(request):
             email = form.cleaned_data['email']
             message = form.cleaned_data['message']
             subject = f'Message from {full_name}'
-
             html_content = render_to_string('template_email_contact.html', {
                                             'full_name': full_name, 'email': email, 'message': message})
             text_content = strip_tags(html_content)
-
             email_msg = EmailMultiAlternatives(subject, text_content, to=[
                                                'manuelledezma687@gmail.com'], cc=[email])
             email_msg.attach_alternative(html_content, "text/html")

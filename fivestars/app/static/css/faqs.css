@@ -27,7 +27,7 @@ h2.privacy-title {
     font-weight: 500;
 }
 
-li#question-container {
+li.question-container {
     background-color: var(--white);
     border-radius: 8px;
     box-shadow: 2px 2px 2px var(--black);
@@ -36,6 +36,18 @@ li#question-container {
     list-style: none;
     margin: 20px;
     padding: 20px 20px 10px 10px;
+    cursor: pointer;
+}
+
+p.answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+p.answer.active {
+    max-height: 500px;
+    transition: max-height 0.5s ease-in;
 }
 
 @media (max-width: 457px) {

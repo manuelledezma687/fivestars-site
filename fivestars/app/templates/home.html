@@ -52,6 +52,11 @@
                 {{ form.type_of_service }}
             </div>
             <button id="send" class="w-100 btn btn-lg btn-primary" type="submit">Book your Trip</button>
+            {% if error %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+            {% endif %}
             <hr class="my-4" />
             <small class="text-muted">By clicking Your Booking, you agree to the terms of use.</small>
         </form>

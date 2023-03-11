@@ -4,11 +4,23 @@
     <h1 class="faqs-title">FAQs</h1>
     <article id='ul-faq'>
         {% for faq in faqs%}
-        <li id='question-container'>
-            <h2 class='privacy-title ' key={index}>{{ faq.question }}</h2>
+        <li id='question-container' class='question-container'>
+            <h2 class='privacy-title' key={index}>{{ faq.question }}</h2>
             <p class='answer'>{{ faq.answer }}</p>
         </li>
         {% endfor %}
     </article>
 </div>
+<script>
+    const faqs = document.querySelectorAll('#question-container');
+
+    faqs.forEach((faq) => {
+        const question = faq.querySelector('.privacy-title');
+        const answer = faq.querySelector('.answer');
+
+        question.addEventListener('click', () => {
+            answer.classList.toggle('active');
+        });
+    });
+</script>
 {% endblock %}

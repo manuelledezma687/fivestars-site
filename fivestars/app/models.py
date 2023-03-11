@@ -27,6 +27,11 @@ PAYMENT_METHOD = (
     ("Zelle", "Zelle"),
 )
 
+STATUS = (
+    ("0", "Pending"),
+    ("1", "Confirmed"),
+    ("2", "Cancelled"),
+)
 
 class Referral(models.Model):
     full_name = models.CharField(max_length=30)
@@ -70,6 +75,8 @@ class Booking(models.Model):  ## trabajar este metodo para para booking_count y 
     observations = models.CharField(max_length=200, blank=True)
     referrals_code = models.ForeignKey(Referral,null=True, default=None, on_delete=models.SET_NULL)
     amount = models.FloatField(default=0)
+    status = models.CharField(max_length=20, default="Pending", choices=STATUS)
+    notes = models.CharField(max_length=200, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
@@ -106,7 +113,6 @@ class Booking(models.Model):  ## trabajar este metodo para para booking_count y 
     def get_absolute_url(self):
         return reverse("booking_detail", args=[str(self.id)])
     
-
 
 class Rating(models.Model):
     booking_id = models.OneToOneField(Booking, on_delete=models.PROTECT)
