@@ -11,5 +11,4 @@ urlpatterns = [
     path("success_message", views.success_message, name="success_message"),
     path('privacy', views.privacy, name='privacy'),
     path('faqs', views.faqs, name='faqs'),
-    path('set_language', views.set_language, name='set_language'),
 ]
